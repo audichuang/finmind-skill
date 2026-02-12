@@ -1,12 +1,8 @@
 ---
 name: querying-finmind
-description: >
-  FinMind Taiwan historical financial data API. For querying historical data
-  only — NOT for real-time trading or live quotes. Covers stock fundamentals
-  (EPS, revenue, financial statements), historical prices, dividends, chip data
-  (三大法人, margin trading, shareholding), valuation (PER/PBR), derivatives
-  (futures/options), and macro economics. Use when analyzing Taiwan market
-  historical data or any FinMind API usage.
+description: |
+  FinMind Taiwan historical financial data & analytics API. Use for: querying historical stock prices (daily/weekly/monthly/tick/kbar), financial statements (EPS/revenue/balance sheet/cash flow), dividends, chip data (三大法人買賣超/融資融券/股權分散表/八大行庫/分點進出), valuation (PER/PBR/市值), derivatives (futures/options historical), and macro economics (景氣指標/恐懼貪婪指數). Returns pandas DataFrame.
+  NOT for: placing orders, real-time streaming quotes, account balance/margin queries, or any live trading operations — use the「shioaji」skill instead.
 ---
 
 # FinMind Taiwan Financial Data API
@@ -90,6 +86,25 @@ dl = DataLoader()
 ```
 
 On rate limit (HTTP 402), remind user to create `finmind_tokens.json` or add more tokens.
+
+### Doppler Integration (Recommended)
+
+Secrets are managed centrally via [Doppler](https://doppler.com). No local config files needed.
+
+```bash
+# 確認是否已登入
+doppler me
+
+# 如果未登入，執行登入（Mac 或 Ubuntu VM 都一樣，只需一次）
+doppler login
+
+# 執行程式（secrets 自動注入為環境變數）
+doppler run -p finmind -c dev -- python my_script.py
+```
+
+Environment variables used:
+- `FINMIND_TOKEN_1` — primary API token
+- `FINMIND_TOKEN_2`, `FINMIND_TOKEN_3`, ... — additional tokens for load balancing
 
 ## Common Parameters
 
@@ -208,6 +223,22 @@ dl.taiwan_business_indicator(start_date="2024-01-01")
 - **Rate limit error (HTTP 402)**: Add `time.sleep(0.5)` between calls, use `dl.login_by_token()`, or use multi-token pool.
 - **`stock_id` vs `futures_id`**: Futures methods use `futures_id` (e.g., `"TX"`), not `stock_id`.
 - **Long-format data**: Financial statements return one row per metric. Use `pivot_table()` to convert to wide format.
+
+## Out of Scope 不在本 Skill 範圍
+
+The following are **NOT** available in FinMind:
+以下功能 FinMind **不提供**：
+
+- Placing, modifying, or canceling orders (下單/改單/刪單)
+- Real-time streaming tick/bidask quotes (即時逐筆/五檔串流行情)
+- Account balance, margin, or position queries (帳戶餘額/保證金/持倉查詢)
+- CA certificate management (憑證管理)
+- Automated trade execution (自動交易執行)
+
+**Use the `shioaji` skill for these tasks.**
+**請使用 `shioaji` skill 進行以上操作。**
+
+---
 
 ## References
 

@@ -7,10 +7,13 @@ Usage:
     dl = get_loader()
     df = dl.taiwan_stock_daily(stock_id="2330", start_date="2024-01-01")
 
-Token config: Place finmind_tokens.json next to this file.
+Token sources (priority order):
+    1. Environment variables (injected by Doppler): FINMIND_TOKEN_1, FINMIND_TOKEN_2, ...
+    2. Legacy config file: finmind_tokens.json
 """
 import itertools
 import json
+import os
 from pathlib import Path
 from FinMind.data import DataLoader
 
@@ -34,11 +37,35 @@ class FinMindPool:
 
 
 def _load_tokens() -> list[str]:
-    """Load tokens from finmind_tokens.json. Returns empty list if file not found."""
-    if not _CONFIG_PATH.exists():
-        return []
-    with open(_CONFIG_PATH) as f:
-        return json.load(f)["tokens"]
+    """
+    Load tokens from environment variables (Doppler) or finmind_tokens.json.
+
+    Environment variable format:
+        FINMIND_TOKEN_1=xxx
+        FINMIND_TOKEN_2=yyy
+        FINMIND_TOKEN_COUNT=2  (optional, auto-detected if not set)
+
+    Falls back to finmind_tokens.json if no env vars found.
+    """
+    # Priority 1: Environment variables (from Doppler)
+    tokens = []
+    i = 1
+    while True:
+        token = os.environ.get(f"FINMIND_TOKEN_{i}")
+        if token is None:
+            break
+        tokens.append(token)
+        i += 1
+
+    if tokens:
+        return tokens
+
+    # Priority 2: Legacy JSON config file
+    if _CONFIG_PATH.exists():
+        with open(_CONFIG_PATH) as f:
+            return json.load(f)["tokens"]
+
+    return []
 
 
 # Module-level singleton
