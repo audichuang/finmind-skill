@@ -1,10 +1,7 @@
-***
-
+---
 name: finmind
-description: |
-FinMind Taiwan historical financial data & analytics API. Use for: querying historical stock prices (daily/weekly/monthly/tick/kbar), financial statements (EPS/revenue/balance sheet/cash flow), dividends, chip data (三大法人買賣超/融資融券/股權分散表/八大行庫/分點進出), valuation (PER/PBR/市值), derivatives (futures/options historical), and macro economics (景氣指標/恐懼貪婪指數). Returns pandas DataFrame.
-NOT for: placing orders, real-time streaming quotes, account balance/margin queries, or any live trading operations — use the「shioaji」skill instead.
-----------------------------------------------------------------------------------------------------------------------------------------------------
+description: "FinMind Taiwan historical financial data & analytics API. Use for: querying historical stock prices (daily/weekly/monthly/tick/kbar), financial statements (EPS/revenue/balance sheet/cash flow), dividends, chip data, valuation (PER/PBR), derivatives (futures/options historical), and macro economics. Returns pandas DataFrame. NOT for: placing orders, real-time streaming quotes, or any live trading operations — use the shioaji skill instead."
+---
 
 # FinMind Taiwan Financial Data API
 
