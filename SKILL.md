@@ -1,9 +1,10 @@
----
-name: querying-finmind
+***
+
+name: finmind
 description: |
-  FinMind Taiwan historical financial data & analytics API. Use for: querying historical stock prices (daily/weekly/monthly/tick/kbar), financial statements (EPS/revenue/balance sheet/cash flow), dividends, chip data (三大法人買賣超/融資融券/股權分散表/八大行庫/分點進出), valuation (PER/PBR/市值), derivatives (futures/options historical), and macro economics (景氣指標/恐懼貪婪指數). Returns pandas DataFrame.
-  NOT for: placing orders, real-time streaming quotes, account balance/margin queries, or any live trading operations — use the「shioaji」skill instead.
----
+FinMind Taiwan historical financial data & analytics API. Use for: querying historical stock prices (daily/weekly/monthly/tick/kbar), financial statements (EPS/revenue/balance sheet/cash flow), dividends, chip data (三大法人買賣超/融資融券/股權分散表/八大行庫/分點進出), valuation (PER/PBR/市值), derivatives (futures/options historical), and macro economics (景氣指標/恐懼貪婪指數). Returns pandas DataFrame.
+NOT for: placing orders, real-time streaming quotes, account balance/margin queries, or any live trading operations — use the「shioaji」skill instead.
+----------------------------------------------------------------------------------------------------------------------------------------------------
 
 # FinMind Taiwan Financial Data API
 
@@ -103,12 +104,13 @@ doppler run -p finmind -c dev -- python my_script.py
 ```
 
 Environment variables used:
-- `FINMIND_TOKEN_1` — primary API token
-- `FINMIND_TOKEN_2`, `FINMIND_TOKEN_3`, ... — additional tokens for load balancing
+
+* `FINMIND_TOKEN_1` — primary API token
+* `FINMIND_TOKEN_2`, `FINMIND_TOKEN_3`, ... — additional tokens for load balancing
 
 ## Common Parameters
 
-Most methods share: `stock_id` (str), `start_date` (str, "YYYY-MM-DD"), `end_date` (str), `timeout` (int, default 60), `stock_id_list` (List[str] for batch), `use_async` (bool for large queries).
+Most methods share: `stock_id` (str), `start_date` (str, "YYYY-MM-DD"), `end_date` (str), `timeout` (int, default 60), `stock_id_list` (List\[str] for batch), `use_async` (bool for large queries).
 
 ## Common Workflow: Stock Analysis
 
@@ -154,7 +156,7 @@ For detailed column definitions and analysis patterns, see [references/fundament
 | `taiwan_stock_kbar()` | Minute K-bar — `Open`, `High`, `Low`, `Close`, `Volume` |
 | `taiwan_stock_weekly()` | Weekly OHLCV |
 | `taiwan_stock_monthly()` | Monthly OHLCV |
-| `taiwan_stock_tick_snapshot()` | Real-time snapshot (accepts str or List[str]) |
+| `taiwan_stock_tick_snapshot()` | Real-time snapshot (accepts str or List\[str]) |
 
 ### 3. Dividend 股利
 
@@ -177,7 +179,7 @@ For detailed column definitions and analysis patterns, see [references/fundament
 | `taiwan_stock_government_bank_buy_sell()` | Government bank trades (八大行庫) |
 | `taiwan_stock_trading_daily_report()` | Broker-level trades (分點進出) |
 
-For full column definitions, see [references/chip_data.md](references/chip_data.md).
+For full column definitions, see [references/chip\_data.md](references/chip_data.md).
 
 ### 5. Valuation 估值
 
@@ -219,29 +221,29 @@ dl.taiwan_business_indicator(start_date="2024-01-01")
 
 ## Common Issues
 
-- **Empty DataFrame**: Stock may be delisted or date range has no data. Verify stock_id with `taiwan_stock_info()`.
-- **Rate limit error (HTTP 402)**: Add `time.sleep(0.5)` between calls, use `dl.login_by_token()`, or use multi-token pool.
-- **`stock_id` vs `futures_id`**: Futures methods use `futures_id` (e.g., `"TX"`), not `stock_id`.
-- **Long-format data**: Financial statements return one row per metric. Use `pivot_table()` to convert to wide format.
+* **Empty DataFrame**: Stock may be delisted or date range has no data. Verify stock\_id with `taiwan_stock_info()`.
+* **Rate limit error (HTTP 402)**: Add `time.sleep(0.5)` between calls, use `dl.login_by_token()`, or use multi-token pool.
+* **`stock_id` vs `futures_id`**: Futures methods use `futures_id` (e.g., `"TX"`), not `stock_id`.
+* **Long-format data**: Financial statements return one row per metric. Use `pivot_table()` to convert to wide format.
 
 ## Out of Scope 不在本 Skill 範圍
 
 The following are **NOT** available in FinMind:
 以下功能 FinMind **不提供**：
 
-- Placing, modifying, or canceling orders (下單/改單/刪單)
-- Real-time streaming tick/bidask quotes (即時逐筆/五檔串流行情)
-- Account balance, margin, or position queries (帳戶餘額/保證金/持倉查詢)
-- CA certificate management (憑證管理)
-- Automated trade execution (自動交易執行)
+* Placing, modifying, or canceling orders (下單/改單/刪單)
+* Real-time streaming tick/bidask quotes (即時逐筆/五檔串流行情)
+* Account balance, margin, or position queries (帳戶餘額/保證金/持倉查詢)
+* CA certificate management (憑證管理)
+* Automated trade execution (自動交易執行)
 
 **Use the `shioaji` skill for these tasks.**
 **請使用 `shioaji` skill 進行以上操作。**
 
----
+***
 
 ## References
 
-- **Fundamentals details**: [references/fundamentals.md](references/fundamentals.md) — column definitions, analysis patterns, pivot examples
-- **Chip data details**: [references/chip_data.md](references/chip_data.md) — institutional, margin, shareholding columns
-- **Derivatives details**: [references/derivatives.md](references/derivatives.md) — futures/options methods and columns
+* **Fundamentals details**: [references/fundamentals.md](references/fundamentals.md) — column definitions, analysis patterns, pivot examples
+* **Chip data details**: [references/chip\_data.md](references/chip_data.md) — institutional, margin, shareholding columns
+* **Derivatives details**: [references/derivatives.md](references/derivatives.md) — futures/options methods and columns
